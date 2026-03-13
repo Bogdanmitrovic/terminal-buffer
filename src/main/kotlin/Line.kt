@@ -15,8 +15,9 @@ class Line(val width: Int) {
         cells[column] = cell
     }
 
-    fun createCopy() {
+    fun createCopy(): Line {
         val copy = Line(width)
         cells.forEachIndexed { i, row -> copy.cells[i] = row }
+        return copy
     }
 }
