@@ -9,6 +9,9 @@ class TerminalBuffer {
     var backgroundColor: Color = Color.DEFAULT
     var styles: Set<Style> = emptySet()
 
+    var cursorRow:Int =0
+    var cursorColumn:Int =0
+
     fun setup(newWidth:Int, newHeight:Int, newScrollbackLines:Int) {
         width = newWidth
         height = newHeight
@@ -19,6 +22,14 @@ class TerminalBuffer {
         foregroundColor = newForegroundColor
         backgroundColor = newBackgroundColor
         styles = newStyles
+    }
+
+    fun setCursorPosition(row:Int, column:Int) {
+        cursorRow = row.coerceIn(0, height - 1)
+        cursorColumn = column.coerceIn(0, width - 1)
+    }
+    fun moveCursor(horizontal:Int, vertical:Int) {
+        setCursorPosition(cursorRow + vertical, cursorColumn + horizontal)
     }
 
 }
