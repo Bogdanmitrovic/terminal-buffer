@@ -9,8 +9,14 @@ class Line(val width: Int) {
         require(column in 0..<width) { "getCell - Column index out of bounds: $column" }
         return cells[column]
     }
+
     fun setCell(column: Int, cell: Cell) {
         require(column in 0..<width) { "setCell - Column index out of bounds: $column" }
         cells[column] = cell
+    }
+
+    fun createCopy() {
+        val copy = Line(width)
+        cells.forEachIndexed { i, row -> copy.cells[i] = row }
     }
 }
