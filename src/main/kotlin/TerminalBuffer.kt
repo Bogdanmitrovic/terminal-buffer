@@ -3,19 +3,23 @@ package org.bogdanmitrovic
 class TerminalBuffer {
     var width: Int = 80
     var height: Int = 24
-    var scrollbackLines: Int = 10000 // only value I could find, default for ubuntu
+    var maxHistoryLines: Int = 10000 // only value I could find, default for ubuntu
 
     var foregroundColor: Color = Color.DEFAULT
     var backgroundColor: Color = Color.DEFAULT
     var styles: Set<Style> = emptySet()
 
+    val screen: Array<Line> = Array(height) { Line(width) }
+    val history: ArrayDeque<Line> = ArrayDeque()
+
+
     var cursorRow: Int = 0
     var cursorColumn: Int = 0
 
-    fun setup(newWidth: Int, newHeight: Int, newScrollbackLines: Int) {
+    fun setup(newWidth: Int, newHeight: Int, newMaxHistoryLines: Int) {
         width = newWidth
         height = newHeight
-        scrollbackLines = newScrollbackLines
+        maxHistoryLines = newMaxHistoryLines
     }
 
     fun setAttributes(newForegroundColor: Color, newBackgroundColor: Color, newStyles: Set<Style>) {
@@ -38,4 +42,29 @@ class TerminalBuffer {
     fun moveCursorRight(n: Int = 1) = moveCursor(horizontal = n)
     fun moveCursorLeft(n: Int = 1) = moveCursor(horizontal = -n)
 
+    fun writeText(text: String) {
+        for (char in text) {
+            screen[cursorRow].setCell(cursorColumn, Cell(char, foregroundColor, backgroundColor, styles))
+            cursorColumn++
+            if (cursorColumn == width) {
+                cursorColumn = 0
+                cursorRow++
+                if (cursorRow == height) {
+                    scrollLine()
+                    cursorRow--;
+                }
+            }
+        }
+    }
+
+    private fun scrollLine() {
+        val toMove = screen[0].createCopy()
+        if (history.size == maxHistoryLines)
+            history.removeFirst()
+        history.addLast(toMove)
+        for (row in 0..<height - 1) {
+            screen[row] = screen[row + 1]
+        }
+        screen[height - 1] = Line(width)
+    }
 }
