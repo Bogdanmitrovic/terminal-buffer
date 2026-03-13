@@ -1,18 +1,18 @@
 package org.bogdanmitrovic
 
 class TerminalBuffer {
-    var width:Int = 80
-    var height:Int = 24
-    var scrollbackLines:Int =10000 // only value I could find, default for ubuntu
+    var width: Int = 80
+    var height: Int = 24
+    var scrollbackLines: Int = 10000 // only value I could find, default for ubuntu
 
     var foregroundColor: Color = Color.DEFAULT
     var backgroundColor: Color = Color.DEFAULT
     var styles: Set<Style> = emptySet()
 
-    var cursorRow:Int =0
-    var cursorColumn:Int =0
+    var cursorRow: Int = 0
+    var cursorColumn: Int = 0
 
-    fun setup(newWidth:Int, newHeight:Int, newScrollbackLines:Int) {
+    fun setup(newWidth: Int, newHeight: Int, newScrollbackLines: Int) {
         width = newWidth
         height = newHeight
         scrollbackLines = newScrollbackLines
@@ -24,12 +24,18 @@ class TerminalBuffer {
         styles = newStyles
     }
 
-    fun setCursorPosition(row:Int, column:Int) {
+    fun setCursorPosition(row: Int, column: Int) {
         cursorRow = row.coerceIn(0, height - 1)
         cursorColumn = column.coerceIn(0, width - 1)
     }
-    fun moveCursor(horizontal:Int, vertical:Int) {
+
+    fun moveCursor(horizontal: Int = 0, vertical: Int = 0) {
         setCursorPosition(cursorRow + vertical, cursorColumn + horizontal)
     }
+
+    fun moveCursorUp(n: Int = 1) = moveCursor(vertical = n)
+    fun moveCursorDown(n: Int = 1) = moveCursor(vertical = -n)
+    fun moveCursorRight(n: Int = 1) = moveCursor(horizontal = n)
+    fun moveCursorLeft(n: Int = 1) = moveCursor(horizontal = -n)
 
 }
