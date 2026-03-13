@@ -10,9 +10,9 @@ enum class Style {
     BOLD, ITALIC, UNDERLINE
 }
 
-class Cell {
-    val character: Char = ' '
-    val foregroundColor: Color = Color.DEFAULT
-    val backgroundColor: Color = Color.DEFAULT
+data class Cell(
+    val character: Char = ' ',
+    val foregroundColor: Color = Color.DEFAULT,
+    val backgroundColor: Color = Color.DEFAULT,
     val styles: Set<Style> = emptySet()
-}
+)
