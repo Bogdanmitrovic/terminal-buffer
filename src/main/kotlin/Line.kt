@@ -5,4 +5,12 @@ class Line(val width: Int) {
     // I will see if it needs changing if it makes more sense
     val cells: Array<Cell> = Array(width) { Cell() }
 
+    fun getCell(column: Int): Cell {
+        require(column in 0..<width) { "getCell - Column index out of bounds: $column" }
+        return cells[column]
+    }
+    fun setCell(column: Int, cell: Cell) {
+        require(column in 0..<width) { "setCell - Column index out of bounds: $column" }
+        cells[column] = cell
+    }
 }
