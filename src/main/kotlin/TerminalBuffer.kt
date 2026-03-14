@@ -95,4 +95,20 @@ class TerminalBuffer {
     fun insertEmptyLine() {
         scrollLine()
     }
+
+    fun clearScreen() {
+        for (row in 0..<height) {
+            val line = screen[row].createCopy()
+            if (history.size == maxHistoryLines) history.removeFirst()
+            history.addLast(line)
+            screen[row] = Line(width)
+        }
+        cursorRow = 0
+        cursorColumn = 0
+    }
+
+    fun clearAll() {
+        clearScreen()
+        history.clear()
+    }
 }
