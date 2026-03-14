@@ -32,8 +32,8 @@ class TerminalBuffer(
         setCursorPosition(cursorRow + vertical, cursorColumn + horizontal)
     }
 
-    fun moveCursorUp(n: Int = 1) = moveCursor(vertical = n)
-    fun moveCursorDown(n: Int = 1) = moveCursor(vertical = -n)
+    fun moveCursorUp(n: Int = 1) = moveCursor(vertical = -n)
+    fun moveCursorDown(n: Int = 1) = moveCursor(vertical = n)
     fun moveCursorRight(n: Int = 1) = moveCursor(horizontal = n)
     fun moveCursorLeft(n: Int = 1) = moveCursor(horizontal = -n)
 
