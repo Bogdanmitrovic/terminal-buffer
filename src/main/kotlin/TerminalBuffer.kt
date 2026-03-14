@@ -111,4 +111,44 @@ class TerminalBuffer {
         clearScreen()
         history.clear()
     }
+
+    fun getCharAt(row: Int, column: Int): Char {
+        require(row in 0..<height + history.size) { "Row $row is out of bounds" }
+        require(column in 0..<width) { "Column $column is out of bounds" }
+        return if (row < history.size)
+            history[row].getCell(column).character
+        else
+            screen[row - history.size].getCell(column).character
+    }
+
+    fun getAttributesAt(row: Int, column: Int): Triple<Color, Color, Set<Style>> {
+        require(row in 0..<height + history.size) { "Row $row is out of bounds" }
+        require(column in 0..<width) { "Column $column is out of bounds" }
+        val cell = if (row < history.size)
+            history[row].getCell(column)
+        else
+            screen[row - history.size].getCell(column)
+        return Triple(cell.foregroundColor, cell.backgroundColor, cell.styles)
+    }
+
+    fun getLine(row: Int): String {
+        require(row in 0..<height + history.size) { "Row $row is out of bounds" }
+        return if (row < history.size) screen[row].toDisplayString()
+        else screen[row - history.size].toDisplayString()
+    }
+
+    fun getScreen(): String {
+        val sb = StringBuilder()
+        screen.forEach { sb.appendLine(it.toDisplayString()) }
+        return sb.toString().trimEnd()
+    }
+
+    fun getScrollbackAndScreen(): String {
+        // should rename history to scrollback
+        // looks like scrollback is a known term for that
+        val sb = StringBuilder()
+        history.forEach { sb.appendLine(it.toDisplayString()) }
+        screen.forEach { sb.appendLine(it.toDisplayString()) }
+        return sb.toString().trimEnd()
+    }
 }

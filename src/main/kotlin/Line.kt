@@ -26,4 +26,8 @@ class Line(val width: Int) {
             cells[col] = Cell(char, fg, bg)
         }
     }
+
+    fun toDisplayString(): String {
+        return cells.joinToString("") { it.toString() }.trimEnd()
+    }
 }
