@@ -112,6 +112,15 @@ class TerminalBufferTest {
     }
 
     @Test
+    fun `fillLine fills only selected row`() {
+        val buf = TerminalBuffer(5)
+        repeat(3) { buf.writeText("tests") }
+        buf.fillLine(1, 'X')
+        assertEquals("XXXXX", buf.getLine(buf.scrollbackSize + 1))
+        assertEquals("tests", buf.getLine(buf.scrollbackSize + 2))
+    }
+
+    @Test
     fun `scrollback receives lines off screen`() {
         val buf = TerminalBuffer()
         repeat(3) { buf.insertEmptyLine() }
