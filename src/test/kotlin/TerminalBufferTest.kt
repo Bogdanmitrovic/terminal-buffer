@@ -1,5 +1,4 @@
 import org.bogdanmitrovic.TerminalBuffer
-import java.awt.SystemColor.text
 import kotlin.test.*
 
 class TerminalBufferTest {
@@ -90,5 +89,25 @@ class TerminalBufferTest {
         assertEquals(2, buf.scrollbackSize)
     }
 
-    //@Test
+    @Test
+    fun `insertText pushes content`(){
+        val buf = TerminalBuffer()
+        buf.insertText("HellWorld")
+        buf.setCursorPosition(0,4)
+        buf.insertText("o ")
+        assertEquals("Hello World", buf.getLine(0))
+    }
+
+    @Test
+    fun `insertText drops content to the right`() {
+        // I wasnt sure if this is expected behavior
+        // but other terminals seem to work like this
+        val buf = TerminalBuffer(10,5)
+        buf.writeText("abcdefghij")
+        buf.setCursorPosition(0, 0)
+        buf.insertText("000")
+        assertEquals("000abcdefg", buf.getLine(0))
+    }
+
+
 }
