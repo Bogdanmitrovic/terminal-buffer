@@ -102,7 +102,7 @@ class TerminalBufferTest {
 
     @Test
     fun `insertText drops content to the right`() {
-        // I wasnt sure if this is expected behavior
+        // I wasn't sure if this is expected behavior
         // but other terminals seem to work like this
         val buf = TerminalBuffer(10, 5)
         buf.writeText("abcdefghij")
@@ -197,5 +197,27 @@ class TerminalBufferTest {
         repeat(5) { buf.writeText("tests") }
         assertEquals('t', buf.getCharAt(0, 0))
         assertEquals('s', buf.getCharAt(0, 4))
+    }
+
+    @Test
+    fun `getScreen returns correct content`() {
+        val buf = TerminalBuffer(5, 2)
+        for (i in 0..<5) buf.writeText("line$i")
+        buf.writeText("5")
+        val expected = "line4\n5"
+        assertEquals(expected, buf.getScreen())
+    }
+
+    @Test
+    fun `getScrollbackAndScreen returns correct content`() {
+        val buf = TerminalBuffer(5, 2)
+        val sb = StringBuilder()
+        for (i in 0..<5) {
+            buf.writeText("line$i")
+            sb.append("line$i\n")
+        }
+        buf.writeText("5")
+        sb.append("5")
+        assertEquals(sb.toString(), buf.getScrollbackAndScreen())
     }
 }
