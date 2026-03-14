@@ -62,7 +62,7 @@ class TerminalBuffer(
                 line.setCell(col, line.getCell(col - 1))
             }
             line.setCell(cursorColumn, Cell(char, foregroundColor, backgroundColor, styles))
-            cursorColumn++;
+            cursorColumn++
             if (cursorColumn == width) {
                 cursorColumn = 0
                 cursorRow++
