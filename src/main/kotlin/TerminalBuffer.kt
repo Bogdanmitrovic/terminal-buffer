@@ -48,7 +48,7 @@ class TerminalBuffer(
                 cursorRow++
                 if (cursorRow == height) {
                     scrollLine()
-                    cursorRow--;
+                    cursorRow = height - 1
                 }
             }
         }
@@ -67,7 +67,7 @@ class TerminalBuffer(
                 cursorRow++
                 if (cursorRow == height) {
                     scrollLine()
-                    cursorRow--
+                    cursorRow = height - 1
                 }
             }
         }
