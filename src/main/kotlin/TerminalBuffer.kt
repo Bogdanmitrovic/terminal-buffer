@@ -128,7 +128,7 @@ class TerminalBuffer(
 
     fun getLine(row: Int): String {
         require(row in 0..<height + scrollback.size) { "Row $row is out of bounds" }
-        return if (row < scrollback.size) screen[row].toDisplayString()
+        return if (row < scrollback.size) scrollback[row].toDisplayString()
         else screen[row - scrollback.size].toDisplayString()
     }
 
