@@ -1,3 +1,5 @@
+import org.bogdanmitrovic.Color
+import org.bogdanmitrovic.Style
 import org.bogdanmitrovic.TerminalBuffer
 import kotlin.test.*
 
@@ -121,5 +123,16 @@ class TerminalBufferTest {
         val buf = TerminalBuffer(maxScrollback = 3)
         repeat(5) { buf.insertEmptyLine() }
         assertEquals(3, buf.scrollbackSize)
+    }
+
+    @Test
+    fun `attributes are applied`() {
+        val buf = TerminalBuffer()
+        buf.setAttributes(Color.BRIGHT_GREEN, Color.BLACK, setOf(Style.BOLD))
+        buf.writeText("test test")
+        val (fg, bg, styles) = buf.getAttributesAt(buf.scrollbackSize, 0)
+        assertEquals(Color.BRIGHT_GREEN, fg)
+        assertEquals(Color.BLACK, bg)
+        assertTrue(Style.BOLD in styles)
     }
 }
