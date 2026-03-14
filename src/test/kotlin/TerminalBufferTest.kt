@@ -181,4 +181,21 @@ class TerminalBufferTest {
         assertEquals(0, buf.cursorRow)
         assertEquals(0, buf.cursorColumn)
     }
+
+    @Test
+    fun `getCharAt works for screen`() {
+        val buf = TerminalBuffer(5, 5)
+        buf.writeText("test test")
+        assertEquals('t', buf.getCharAt(0, 0))
+        assertEquals(' ', buf.getCharAt(0, 4))
+        assertEquals('t', buf.getCharAt(1, 0))
+    }
+
+    @Test
+    fun `getCharAt works for scrollback`() {
+        val buf = TerminalBuffer(5, 2)
+        repeat(5) { buf.writeText("tests") }
+        assertEquals('t', buf.getCharAt(0, 0))
+        assertEquals('s', buf.getCharAt(0, 4))
+    }
 }
