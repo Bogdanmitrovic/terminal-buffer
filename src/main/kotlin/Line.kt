@@ -20,4 +20,10 @@ class Line(val width: Int) {
         cells.forEachIndexed { i, row -> copy.cells[i] = row }
         return copy
     }
+
+    fun fill(char: Char, fg: Color, bg: Color) {
+        for (col in 0..<width) {
+            cells[col] = Cell(char, fg, bg)
+        }
+    }
 }
