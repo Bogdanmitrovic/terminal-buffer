@@ -91,4 +91,8 @@ class TerminalBuffer {
         require(row in 0 until height) { "Row $row out of bounds" }
         screen[row].fill(char, fg, bg)
     }
+
+    fun insertEmptyLine() {
+        scrollLine()
+    }
 }
