@@ -186,9 +186,9 @@ class TerminalBufferTest {
     fun `getCharAt works for screen`() {
         val buf = TerminalBuffer(5, 5)
         buf.writeText("test test")
-        assertEquals('t', buf.getCharAt(0, 0))
-        assertEquals(' ', buf.getCharAt(0, 4))
-        assertEquals('t', buf.getCharAt(1, 0))
+        assertEquals('t', buf.getCharAt(buf.scrollbackSize, 0))
+        assertEquals(' ', buf.getCharAt(buf.scrollbackSize, 4))
+        assertEquals('t', buf.getCharAt(buf.scrollbackSize + 1, 0))
     }
 
     @Test
