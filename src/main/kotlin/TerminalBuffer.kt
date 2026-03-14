@@ -86,7 +86,7 @@ class TerminalBuffer(
     }
 
     fun fillLine(row: Int, char: Char = ' ', fg: Color = Color.DEFAULT, bg: Color = Color.DEFAULT) {
-        require(row in 0 until height) { "Row $row out of bounds" }
+        require(row in 0 ..< height) { "Row $row out of bounds" }
         screen[row].fill(char, fg, bg)
     }
 
