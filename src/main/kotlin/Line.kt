@@ -28,6 +28,6 @@ class Line(val width: Int) {
     }
 
     fun toDisplayString(): String {
-        return cells.joinToString("") { it.toString() }.trimEnd()
+        return cells.joinToString("") { it.character.toString() }.trimEnd()
     }
 }
