@@ -86,7 +86,7 @@ class TerminalBuffer(
     }
 
     fun fillLine(row: Int, char: Char = ' ', fg: Color = Color.DEFAULT, bg: Color = Color.DEFAULT) {
-        require(row in 0 ..< height) { "Row $row out of bounds" }
+        require(row in 0..<height) { "Row $row out of bounds" }
         screen[row].fill(char, fg, bg)
     }
 
@@ -101,13 +101,15 @@ class TerminalBuffer(
             scrollback.addLast(line)
             screen[row] = Line(width)
         }
-        cursorRow = 0
-        cursorColumn = 0
+        setCursorPosition(0, 0)
     }
 
     fun clearAll() {
-        clearScreen()
+        for (row in 0..<height) {
+            screen[row] = Line(width)
+        }
         scrollback.clear()
+        setCursorPosition(0, 0)
     }
 
     fun getCharAt(row: Int, column: Int): Char {
