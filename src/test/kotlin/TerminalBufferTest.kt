@@ -52,7 +52,7 @@ class TerminalBufferTest {
     fun `writeText writes text`() {
         val buf = TerminalBuffer()
         buf.writeText("test test")
-        assertEquals("test test", buf.getLine(0))
+        assertEquals("test test", buf.getLine(buf.scrollbackSize))
     }
 
     @Test
@@ -77,7 +77,7 @@ class TerminalBufferTest {
         buf.writeText("test test")
         buf.setCursorPosition(0, 0)
         buf.writeText("abcdef")
-        assertEquals("abcdefest", buf.getLine(0))
+        assertEquals("abcdefest", buf.getLine(buf.scrollbackSize))
     }
 
     @Test
@@ -108,7 +108,7 @@ class TerminalBufferTest {
         buf.writeText("abcdefghij")
         buf.setCursorPosition(0, 0)
         buf.insertText("000")
-        assertEquals("000abcdefg", buf.getLine(0))
+        assertEquals("000abcdefg", buf.getLine(buf.scrollbackSize))
     }
 
     @Test
