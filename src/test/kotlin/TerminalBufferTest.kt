@@ -109,5 +109,17 @@ class TerminalBufferTest {
         assertEquals("000abcdefg", buf.getLine(0))
     }
 
+    @Test
+    fun `scrollback receives lines off screen`() {
+        val buf = TerminalBuffer()
+        repeat(3) { buf.insertEmptyLine() }
+        assertEquals(3, buf.scrollbackSize)
+    }
 
+    @Test
+    fun `scrollback maintains max size`() {
+        val buf = TerminalBuffer(maxScrollback = 3)
+        repeat(5) { buf.insertEmptyLine() }
+        assertEquals(3, buf.scrollbackSize)
+    }
 }
