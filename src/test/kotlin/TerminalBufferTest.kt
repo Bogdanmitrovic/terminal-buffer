@@ -92,6 +92,18 @@ class TerminalBufferTest {
     }
 
     @Test
+    fun `writeText handles content larger than screen`() {
+        val buf = TerminalBuffer(5, 5)
+        buf.writeText("a".repeat(50))
+        assertEquals(6, buf.scrollbackSize)
+        assertEquals("aaaaa", buf.getLine(0))
+        assertEquals("aaaaa", buf.getLine(buf.scrollbackSize))
+        assertTrue(buf.getLine(buf.scrollbackSize + 4).isEmpty())
+        assertEquals(4, buf.cursorRow)
+        assertEquals(0, buf.cursorColumn)
+    }
+
+    @Test
     fun `insertText pushes content`() {
         val buf = TerminalBuffer()
         buf.insertText("HellWorld")
