@@ -65,7 +65,7 @@ class TerminalBuffer {
             }
             line.setCell(cursorColumn, Cell(char, foregroundColor, backgroundColor, styles))
             cursorColumn++;
-            if(cursorColumn == width) {
+            if (cursorColumn == width) {
                 cursorColumn = 0
                 cursorRow++
                 if (cursorRow == height) {
@@ -85,5 +85,10 @@ class TerminalBuffer {
             screen[row] = screen[row + 1]
         }
         screen[height - 1] = Line(width)
+    }
+
+    fun fillLine(row: Int, char: Char = ' ', fg: Color = Color.DEFAULT, bg: Color = Color.DEFAULT) {
+        require(row in 0 until height) { "Row $row out of bounds" }
+        screen[row].fill(char, fg, bg)
     }
 }
