@@ -5,6 +5,7 @@ class TerminalBuffer(
     val height: Int = 24,
     val maxScrollback: Int = 10000  // only value I could find, default for ubuntu
 ) {
+    val scrollbackSize: Int get() = scrollback.size
 
     private var foregroundColor: Color = Color.DEFAULT
     private var backgroundColor: Color = Color.DEFAULT
