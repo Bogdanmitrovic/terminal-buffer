@@ -92,10 +92,10 @@ class TerminalBufferTest {
     }
 
     @Test
-    fun `insertText pushes content`(){
+    fun `insertText pushes content`() {
         val buf = TerminalBuffer()
         buf.insertText("HellWorld")
-        buf.setCursorPosition(0,4)
+        buf.setCursorPosition(0, 4)
         buf.insertText("o ")
         assertEquals("Hello World", buf.getLine(0))
     }
@@ -104,7 +104,7 @@ class TerminalBufferTest {
     fun `insertText drops content to the right`() {
         // I wasnt sure if this is expected behavior
         // but other terminals seem to work like this
-        val buf = TerminalBuffer(10,5)
+        val buf = TerminalBuffer(10, 5)
         buf.writeText("abcdefghij")
         buf.setCursorPosition(0, 0)
         buf.insertText("000")
@@ -134,5 +134,42 @@ class TerminalBufferTest {
         assertEquals(Color.BRIGHT_GREEN, fg)
         assertEquals(Color.BLACK, bg)
         assertTrue(Style.BOLD in styles)
+    }
+
+    @Test
+    fun `clearScreen moves content to scrollback`() {
+        val buf = TerminalBuffer()
+        buf.writeText("test test")
+        buf.clearScreen()
+        assertTrue(buf.scrollbackSize > 0)
+        assertEquals("test test", buf.getLine(0))
+        assertTrue(buf.getLine(buf.scrollbackSize).isEmpty())
+    }
+
+    @Test
+    fun `clearScreen resets cursor pos`() {
+        val buf = TerminalBuffer(5)
+        buf.writeText("test test")
+        buf.clearScreen()
+        assertEquals(0, buf.cursorRow)
+        assertEquals(0, buf.cursorColumn)
+    }
+
+    @Test
+    fun `clearAll clears everything`() {
+        val buf = TerminalBuffer(5)
+        buf.writeText("test test")
+        buf.clearAll()
+        assertEquals(0, buf.scrollbackSize)
+        assertTrue(buf.getLine(0).isEmpty())
+    }
+
+    @Test
+    fun `clearAll resets cursor pos`() {
+        val buf = TerminalBuffer(5)
+        buf.writeText("test test")
+        buf.clearAll()
+        assertEquals(0, buf.cursorRow)
+        assertEquals(0, buf.cursorColumn)
     }
 }
