@@ -10,8 +10,8 @@ class TerminalBuffer(
     var backgroundColor: Color = Color.DEFAULT
     var styles: Set<Style> = emptySet()
 
-    val screen: Array<Line> = Array(height) { Line(width) }
-    val scrollback: ArrayDeque<Line> = ArrayDeque()
+    private val screen: Array<Line> = Array(height) { Line(width) }
+    private val scrollback: ArrayDeque<Line> = ArrayDeque()
 
 
     var cursorRow: Int = 0
