@@ -57,6 +57,25 @@ class TerminalBuffer {
         }
     }
 
+    fun insertText(text: String) {
+        for (char in text) {
+            val line = screen[cursorRow]
+            for (col in width - 1 downTo cursorColumn + 1) {
+                line.setCell(col, line.getCell(col - 1))
+            }
+            line.setCell(cursorColumn, Cell(char, foregroundColor, backgroundColor, styles))
+            cursorColumn++;
+            if(cursorColumn == width) {
+                cursorColumn = 0
+                cursorRow++
+                if (cursorRow == height) {
+                    scrollLine()
+                    cursorRow--
+                }
+            }
+        }
+    }
+
     private fun scrollLine() {
         val toMove = screen[0].createCopy()
         if (history.size == maxHistoryLines)
