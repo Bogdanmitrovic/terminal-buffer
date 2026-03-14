@@ -1,9 +1,10 @@
 package org.bogdanmitrovic
 
-class TerminalBuffer {
-    var width: Int = 80
-    var height: Int = 24
-    var maxScrollbackLines: Int = 10000 // only value I could find, default for ubuntu
+class TerminalBuffer(
+    val width: Int = 80,
+    val height: Int = 24,
+    val maxScrollback: Int = 10000  // only value I could find, default for ubuntu
+) {
 
     var foregroundColor: Color = Color.DEFAULT
     var backgroundColor: Color = Color.DEFAULT
@@ -15,12 +16,6 @@ class TerminalBuffer {
 
     var cursorRow: Int = 0
     var cursorColumn: Int = 0
-
-    fun setup(newWidth: Int, newHeight: Int, newMaxScrollbackLines: Int) {
-        width = newWidth
-        height = newHeight
-        maxScrollbackLines = newMaxScrollbackLines
-    }
 
     fun setAttributes(newForegroundColor: Color, newBackgroundColor: Color, newStyles: Set<Style>) {
         foregroundColor = newForegroundColor
@@ -78,7 +73,7 @@ class TerminalBuffer {
 
     private fun scrollLine() {
         val toMove = screen[0].createCopy()
-        if (scrollback.size == maxScrollbackLines)
+        if (scrollback.size == maxScrollback)
             scrollback.removeFirst()
         scrollback.addLast(toMove)
         for (row in 0..<height - 1) {
@@ -99,7 +94,7 @@ class TerminalBuffer {
     fun clearScreen() {
         for (row in 0..<height) {
             val line = screen[row].createCopy()
-            if (scrollback.size == maxScrollbackLines) scrollback.removeFirst()
+            if (scrollback.size == maxScrollback) scrollback.removeFirst()
             scrollback.addLast(line)
             screen[row] = Line(width)
         }
