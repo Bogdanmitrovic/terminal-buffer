@@ -3,23 +3,23 @@ package org.bogdanmitrovic
 class TerminalBuffer {
     var width: Int = 80
     var height: Int = 24
-    var maxHistoryLines: Int = 10000 // only value I could find, default for ubuntu
+    var maxScrollbackLines: Int = 10000 // only value I could find, default for ubuntu
 
     var foregroundColor: Color = Color.DEFAULT
     var backgroundColor: Color = Color.DEFAULT
     var styles: Set<Style> = emptySet()
 
     val screen: Array<Line> = Array(height) { Line(width) }
-    val history: ArrayDeque<Line> = ArrayDeque()
+    val scrollback: ArrayDeque<Line> = ArrayDeque()
 
 
     var cursorRow: Int = 0
     var cursorColumn: Int = 0
 
-    fun setup(newWidth: Int, newHeight: Int, newMaxHistoryLines: Int) {
+    fun setup(newWidth: Int, newHeight: Int, newMaxScrollbackLines: Int) {
         width = newWidth
         height = newHeight
-        maxHistoryLines = newMaxHistoryLines
+        maxScrollbackLines = newMaxScrollbackLines
     }
 
     fun setAttributes(newForegroundColor: Color, newBackgroundColor: Color, newStyles: Set<Style>) {
@@ -78,9 +78,9 @@ class TerminalBuffer {
 
     private fun scrollLine() {
         val toMove = screen[0].createCopy()
-        if (history.size == maxHistoryLines)
-            history.removeFirst()
-        history.addLast(toMove)
+        if (scrollback.size == maxScrollbackLines)
+            scrollback.removeFirst()
+        scrollback.addLast(toMove)
         for (row in 0..<height - 1) {
             screen[row] = screen[row + 1]
         }
@@ -99,8 +99,8 @@ class TerminalBuffer {
     fun clearScreen() {
         for (row in 0..<height) {
             val line = screen[row].createCopy()
-            if (history.size == maxHistoryLines) history.removeFirst()
-            history.addLast(line)
+            if (scrollback.size == maxScrollbackLines) scrollback.removeFirst()
+            scrollback.addLast(line)
             screen[row] = Line(width)
         }
         cursorRow = 0
@@ -109,32 +109,32 @@ class TerminalBuffer {
 
     fun clearAll() {
         clearScreen()
-        history.clear()
+        scrollback.clear()
     }
 
     fun getCharAt(row: Int, column: Int): Char {
-        require(row in 0..<height + history.size) { "Row $row is out of bounds" }
+        require(row in 0..<height + scrollback.size) { "Row $row is out of bounds" }
         require(column in 0..<width) { "Column $column is out of bounds" }
-        return if (row < history.size)
-            history[row].getCell(column).character
+        return if (row < scrollback.size)
+            scrollback[row].getCell(column).character
         else
-            screen[row - history.size].getCell(column).character
+            screen[row - scrollback.size].getCell(column).character
     }
 
     fun getAttributesAt(row: Int, column: Int): Triple<Color, Color, Set<Style>> {
-        require(row in 0..<height + history.size) { "Row $row is out of bounds" }
+        require(row in 0..<height + scrollback.size) { "Row $row is out of bounds" }
         require(column in 0..<width) { "Column $column is out of bounds" }
-        val cell = if (row < history.size)
-            history[row].getCell(column)
+        val cell = if (row < scrollback.size)
+            scrollback[row].getCell(column)
         else
-            screen[row - history.size].getCell(column)
+            screen[row - scrollback.size].getCell(column)
         return Triple(cell.foregroundColor, cell.backgroundColor, cell.styles)
     }
 
     fun getLine(row: Int): String {
-        require(row in 0..<height + history.size) { "Row $row is out of bounds" }
-        return if (row < history.size) screen[row].toDisplayString()
-        else screen[row - history.size].toDisplayString()
+        require(row in 0..<height + scrollback.size) { "Row $row is out of bounds" }
+        return if (row < scrollback.size) screen[row].toDisplayString()
+        else screen[row - scrollback.size].toDisplayString()
     }
 
     fun getScreen(): String {
@@ -144,10 +144,8 @@ class TerminalBuffer {
     }
 
     fun getScrollbackAndScreen(): String {
-        // should rename history to scrollback
-        // looks like scrollback is a known term for that
         val sb = StringBuilder()
-        history.forEach { sb.appendLine(it.toDisplayString()) }
+        scrollback.forEach { sb.appendLine(it.toDisplayString()) }
         screen.forEach { sb.appendLine(it.toDisplayString()) }
         return sb.toString().trimEnd()
     }
