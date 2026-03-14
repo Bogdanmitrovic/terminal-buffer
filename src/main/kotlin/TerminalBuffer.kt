@@ -15,7 +15,9 @@ class TerminalBuffer(
 
 
     var cursorRow: Int = 0
+        private set
     var cursorColumn: Int = 0
+        private set
 
     fun setAttributes(newForegroundColor: Color, newBackgroundColor: Color, newStyles: Set<Style>) {
         foregroundColor = newForegroundColor
